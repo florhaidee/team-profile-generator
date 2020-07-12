@@ -1,5 +1,4 @@
 const Employee = require('../lib/Employee');
-const { exportAllDeclaration } = require('@babel/types');
 
 test('creates a Employee object', ()=>{
     const employee = new Employee('John',12,'johnGuerra@mytest.com');
