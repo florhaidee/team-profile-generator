@@ -26,5 +26,9 @@
   "homepage": "https://github.com/florhaidee/team-profile-generator#readme",
   "devDependencies": {
     "jest": "^26.1.0"
+  },
+  "dependencies": {
+    "email-validator": "^2.0.4",
+    "inquirer": "^7.3.1"
   }
 }
