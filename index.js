@@ -1,11 +1,10 @@
 const inquirer = require('inquirer');
-const emailValidator = require('email-validator');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
-const engineerArray = [];
-const internArray = [];
-const manager = {};
+const Team = require('./lib/Team');
+
+const team = new Team();
 const createEmployee = (role) => {
     return inquirer
     .prompt([
@@ -40,8 +39,8 @@ const createEmployee = (role) => {
             message: `Please ${role}'s email address (Required)`,
             validate:  input => {
                 //validate is input is a correct email string
-                const val = emailValidator.validate(input);
-                if (val) {
+                const valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input)
+                if (valid) {
                     return true;
                 }else {
                     console.log
@@ -50,37 +49,107 @@ const createEmployee = (role) => {
             }
         }
     ])
+    .then (employee =>{
+        if (role ==='Manager'){
+            return createManager(employee)
+        }else if (role ==='Engineer'){
+            return createEngineer(employee)
+        }else if (role === 'Intern'){
+            return createIntern(employee)
+        }
+    })
 };
+
 const createManager = (employee) =>{ 
     let {name,id,email}= employee
     return inquirer
-    .prompt(
+    .prompt([
         {
             type: 'number',
             name: 'officeNumber',
             message: `Please enter Office Number (Required)`,
             validate: input => {
-                //console.log(input.value)
-                // regex= /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-                // let val = input.value.match(regex);
-                if (input) {
-                    this.manager = new Manager(name,id,email,input)
+                const valid = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(input)
+                if (valid) {
+                    team.addManager(name,id,email,input)
+                    console.log(team)
                     return true;
                 }else {
-                    console.log
                     return 'Please use "arrow up" to provide a valid phone number'; 
                 }
             }
         }
-    // ).then(data =>{
-    //     console.log(data)
-    // }
+    ])
+    .then(data => menu())
+};
+const createEngineer = (employee) =>{
+    let {name,id,email}= employee
+    return inquirer
+    .prompt([
+        {
+            type: 'input',
+            name: 'github',
+            message: `Please enter github username (Required)`,
+            validate: input => {
+                if (input) {
+                    team.addEngineer(new Engineer(name,id,email,input))
+                    console.log(team)
+                    return true;
+                }else {
+                    return 'Please enter github username'; 
+                }
+            }
+        },
+    ])
+    .then(data => menu())
+};
+const createIntern = (employee)=>{
+    let {name,id,email}= employee
+    return inquirer
+    .prompt([
+    {
+        type: 'input',
+        name: 'school',
+        message: `Please enter school (Required)`,
+        validate: input => {
+            if (input) {
+               team.addIntern(new Intern(name,id,email,input))
+               console.log(team)
+                return true;
+            }else {
+                return 'Please enter school'; 
+            }
+        }
+    }])
+    .then(data => menu())
+};
+const menu = () => {
+    return inquirer
+    .prompt(
+        {
+            type: 'list',
+            message: 'Add a new member',
+            name: 'choice',
+            choices: ['Engineer', 'Intern', 'Finish building my team'],
+            filter: (input) => {return input.toLowerCase();}
+        }
     )
+    .then(({choice}) =>{
+        if (choice === 'engineer'){
+           return createEmployee('Engineer')
+        }else if (choice === 'intern'){
+            return createEmployee('Intern')
+        }else if (choice === 'finish building my team'){
+            return ('Your team is ready. go to dist/ folder to see the file created')
+        }    
+    })
+};
+
+const main= () =>{
+    console.log("Welcome to Team Profile Generator: Start addind your Manager's team");
+    createEmployee('Manager').then(data=>{
+        console.log(team)
+    })
 }
 
-createEmployee('Manager')
-    .then(createManager)
-    .then(data =>{console.log('DATA',data, 'MANAGER', this.manager)})
-    .catch(err => {
-        console.log(err);
-      });
+main()   
