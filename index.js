@@ -1,4 +1,6 @@
 const inquirer = require('inquirer');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
+const generatePage = require('./src/page-template.js');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
@@ -43,7 +45,6 @@ const createEmployee = (role) => {
                 if (valid) {
                     return true;
                 }else {
-                    console.log
                     return 'Please provide a valid email'; 
                 }
             }
@@ -72,7 +73,6 @@ const createManager = (employee) =>{
                 const valid = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(input)
                 if (valid) {
                     team.addManager(name,id,email,input)
-                    console.log(team)
                     return true;
                 }else {
                     return 'Please use "arrow up" to provide a valid phone number'; 
@@ -93,7 +93,6 @@ const createEngineer = (employee) =>{
             validate: input => {
                 if (input) {
                     team.addEngineer(new Engineer(name,id,email,input))
-                    console.log(team)
                     return true;
                 }else {
                     return 'Please enter github username'; 
@@ -114,7 +113,6 @@ const createIntern = (employee)=>{
         validate: input => {
             if (input) {
                team.addIntern(new Intern(name,id,email,input))
-               console.log(team)
                 return true;
             }else {
                 return 'Please enter school'; 
@@ -147,9 +145,23 @@ const menu = () => {
 
 const main= () =>{
     console.log("Welcome to Team Profile Generator: Start addind your Manager's team");
-    createEmployee('Manager').then(data=>{
-        console.log(team)
+    createEmployee('Manager')
+    .then(data=>{
+        return generatePage(team)
     })
+    .then(pageHTML => {
+        return writeFile(pageHTML);
+    })
+    .then(writeFileResponse => {
+        console.log(writeFileResponse);
+        return copyFile();
+    })
+    .then(copyFileResponse => {
+        console.log(copyFileResponse);
+    })
+    .catch(err => {
+        console.log(err);
+    });
 }
 
 main()   
