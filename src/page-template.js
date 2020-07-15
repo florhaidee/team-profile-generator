@@ -13,7 +13,7 @@ const generateEngineer = engineer => {
             <div class="card col-4 mb-2 bg-light text-light p-3">
                 <div class="card-header">
                     <h3 class="text-light">${name}</h3>
-                    <h4 class="text-light">Engineer</h4>
+                    <h4 class="text-light"><i class="fas fa-user-cog"></i>  Engineer</h4>
                 </div>
                 <div class="card-body"> 
                     <h5 class="btn text-dark"> ID: ${id}</h5>
@@ -42,7 +42,7 @@ const generateIntern = intern => {
             <div class="card col-4 mb-2 bg-light text-light p-3">
                 <div class="card-header">
                     <h3 class="text-light">${name}</h3>
-                    <h4 class="text-light">Intern</h4>
+                    <h4 class="text-light"><i class="fas fa-user-graduate"></i>  Intern</h4>
                 </div>
                 <div class="card-body"> 
                     <h5 class="btn text-dark"> ID: ${id}</h5>
@@ -66,7 +66,7 @@ const generateManager = manager => {
             <div class="card col-4 mb-2 bg-light text-light p-3">
                 <div class="card-header">
                     <h3 class="text-light">${name}</h3>
-                    <h4 class="text-light">Manager</h4>
+                    <h4 class="text-light"><i class="fas fa-user-tie"></i>  Manager</h4>
                 </div>
                 <div class="card-body"> 
                     <h5 class="btn text-dark"> ID: ${id}</h5>
@@ -92,6 +92,7 @@ module.exports = teamData => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Team Profile Generator</title>
+    <script src="https://kit.fontawesome.com/2310386d33.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Public+Sans:300i,300,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -109,8 +110,7 @@ module.exports = teamData => {
             ${generateIntern(intern)}
         </main>
         <footer class="container text-center py-3">
-        <h3 class="text-dark">&copy; ${new Date().getFullYear()}</h3>
-        <p>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></p>
+        <h3 class="text-dark">&copy; ${new Date().getFullYear()} made by <a class="ml-2 my-1 px-2 py-1 text-dark"  href="https://github.com/florhaidee"  target="_blank">Florhaidee</a></h3>
         </footer>
     </body>
     </html>`
